@@ -6,6 +6,10 @@ require 'sinatra'
 require 'rss'
 require 'nicovideo'
 
+get '/' do
+  'Hello! nicopodcast'
+end
+
 get '/nicopodcast/feed/:mylistid' do
   in_feed = download_feed "http://www.nicovideo.jp/mylist/#{params[:mylistid]}?rss=2.0"
 
@@ -27,7 +31,7 @@ get '/nicopodcast/content/*.mp4' do
     tempdir = "/tmp"
     flv = Tempfile.open("#{movieid}.flv",tempdir)
 
-    download(movieid,"#{ENV['HOME']}/.nicovideo/account.yml",flv)
+    download(movieid,"#{ENV['CONFIG']}/account.yml",flv)
 
     mp4 = File.open("#{tempdir}/#{movieid}.mp4",'w')
     encode flv,mp4
