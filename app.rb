@@ -81,6 +81,7 @@ def generate_feed input_feed,baseurl
 end
 
 def download(video_id,account_file,flv_file)
+  puts "start download #{video_id}"
   account = YAML.load_file(account_file)
   mail = account['mail']
   password = account['password']
@@ -90,6 +91,7 @@ def download(video_id,account_file,flv_file)
   nv.watch(video_id) do |v|
     begin
       flv_file.write v.flv
+      puts "finish download #{video_id}"
     rescue Timeout::Error => e
       sleep 3
       puts "timeout error, retry"
@@ -102,6 +104,8 @@ def download(video_id,account_file,flv_file)
 end
 
 def encode flv,mp4
+  puts "start ffmpeg #{mp4}"
   ffmpeg_option = '-y -vcodec mpeg4 -r 23.976 -b 600k -acodec libfaac -ac 2 -ar 44100 -ab 128k'
-  system "ffmpeg -i #{flv.path} #{ffmpeg_option} #{mp4}"
+  system "ffmpeg -i #{flv.path} #{ffmpeg_option} #{mp4} > /dev/null 2>&1"
+  puts "finish ffmpeg #{mp4}"
 end
