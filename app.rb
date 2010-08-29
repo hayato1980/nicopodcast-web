@@ -33,9 +33,9 @@ get '/nicopodcast/content/*.mp4' do
 
     download(movieid,"#{ENV['CONFIG']}/account.yml",flv)
 
-    mp4 = File.open("#{tempdir}/#{movieid}.mp4",'w')
+    mp4 = "#{tempdir}/#{movieid}.mp4"
     encode flv,mp4
-    send_file mp4.path
+    send_file mp4
 
     flv.close
   rescue =>err
@@ -103,5 +103,5 @@ end
 
 def encode flv,mp4
   ffmpeg_option = '-y -vcodec mpeg4 -r 23.976 -b 600k -acodec libfaac -ac 2 -ar 44100 -ab 128k'
-  system "ffmpeg -i #{flv.path} #{ffmpeg_option} #{mp4.path}"
+  system "ffmpeg -i #{flv.path} #{ffmpeg_option} #{mp4}"
 end
