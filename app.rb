@@ -11,6 +11,8 @@ get '/' do
 end
 
 get '/nicopodcast/feed/:mylistid' do
+  GC.start
+
   in_feed = download_feed "http://www.nicovideo.jp/mylist/#{params[:mylistid]}?rss=2.0"
 
   url = URI.parse(request.url)
@@ -25,6 +27,7 @@ get '/nicopodcast/feed/:mylistid' do
 end
 
 get '/nicopodcast/content/*.mp4' do
+  GC.start
   movieid = params[:splat].first
   content_type :mp4
   begin
@@ -32,7 +35,7 @@ get '/nicopodcast/content/*.mp4' do
     flv = Tempfile.open("#{movieid}.flv",tempdir)
 
     download(movieid,"#{ENV['CONFIG']}/account.yml",flv)
-
+    GC.start
     mp4 = "#{tempdir}/#{movieid}.mp4"
     encode flv,mp4
     send_file mp4
