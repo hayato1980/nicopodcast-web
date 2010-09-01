@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'sinatra'
+require 'sinatra/x_send_file'
 require 'rss'
 require 'nicovideo'
 
@@ -38,7 +39,7 @@ get '/nicopodcast/content/*.mp4' do
     GC.start
     mp4 = "#{tempdir}/#{movieid}.mp4"
     encode flv,mp4
-    send_file mp4
+    x_send_file mp4
 
     flv.close
   rescue =>err
