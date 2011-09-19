@@ -109,6 +109,13 @@ end
 def encode flv,mp4
   puts "start ffmpeg #{mp4}"
   ffmpeg_option = '-y -vcodec mpeg4 -r 23.976 -b 600k -acodec libfaac -ac 2 -ar 44100 -ab 128k'
-  system "ffmpeg -i #{flv.path} #{ffmpeg_option} #{mp4} > /dev/null 2>&1"
+  begin
+    system "ffmpeg -i #{flv.path} #{ffmpeg_option} #{mp4} > /dev/null 2>&1"
+  rescue Errono::ENOMEM
+    GC.start
+    puts "sleep 30 because nomemory for ffmpeg"
+    sleep 30
+    retry
+  end
   puts "finish ffmpeg #{mp4}"
 end
