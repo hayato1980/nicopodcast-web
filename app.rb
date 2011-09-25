@@ -45,6 +45,7 @@ get '/nicopodcast/content/*.mp4' do
     flv.close
   rescue =>err
     p err
+    print err.backtrace.join("\n")
     status 404
   end
 end
