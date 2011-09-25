@@ -3,7 +3,8 @@
 
 require 'rubygems'
 require 'sinatra'
-require 'sinatra/x_send_file'
+require 'sinatra-xsendfile'
+require 'yaml'
 require 'rss'
 require 'nicovideo'
 
